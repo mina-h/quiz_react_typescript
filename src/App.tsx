@@ -1,5 +1,6 @@
 import React, { MouseEvent, useState } from 'react';
 import './App.css';
+import { fetchQuizQuestions } from './API';
 import QuestionCard from './components/QuestoinCard';
 
 
