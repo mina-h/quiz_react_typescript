@@ -25,7 +25,7 @@ const App:React.FC = () => {
 
   const startTrivia = async() => {
     setLoading(true);
-    setGameover(true);
+    setGameover(false);
     const data = await fetchQuizQuestions(TOTAL_QUESTION, Difficulty.EASY);
     console.log(data);
     setQuestions(data);
@@ -36,15 +36,38 @@ const App:React.FC = () => {
   }
 
   const checkAnswer = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (questions[number].correct_answer === userAnswers[number].answer) {
-      setScore(score + 1);
-    } else {
-      setScore(score);
-    }
-  }
+    if (!gameover){
+      const answer = event.currentTarget.value;
+      
+      // questions[number].correct_answer === clickedAnswer
+     //check answer against correct answer 
+      const correct = questions[number].correct_answer === answer;
+     // add score if answer is correct 
+     if (correct) setScore(prev => prev + 1);
+     // save answer in answer object 
+     const answerObj = {
+       question: questions[number].question,
+       answer,
+       correct,
+       correctAnswer: questions[number].correct_answer
+     }
+     setUserAnswers(prev => [...prev, answerObj]);
+
+    // if (questions[number].correct_answer === userAnswers[number].answer) {
+    //   setScore(score + 1);
+    // } else {
+    //   setScore(score);
+    // }
+     }
+  } 
 
   const nextQuestion = () => {
-    setNumber(number+1)  
+    const nextQuestion = number + 1;
+    if (nextQuestion === TOTAL_QUESTION) {
+      setGameover(true);
+    } else {
+      setNumber(nextQuestion);
+    }
   }
   
   
